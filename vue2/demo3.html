@@ -1,0 +1,71 @@
+<!doctype html>
+<head>
+  <title>vue组件demo</title>
+  <meta http-equiv="Content-Type" content="text/html"; charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+</head>
+<body>
+  <div id="father">
+    <demo3></demo3>
+    <counter-1></counter-1>
+    <counter-1></counter-1>
+    <counter-2></counter-2>
+    <counter-2></counter-2>
+  </div>
+</body>
+<script type="text/javascript">
+  Vue.component("demo3",{ //组件名为"demo3"
+    data:function(){  //data写函数
+      return {
+        name:"",
+        age:"",
+        city:""
+        }
+    },
+
+    //template写组件内容（元素和触发的事件）
+
+    /*
+    * 可以看到第一个报了错，实际是因为找不到id，getElementById(ID) 并没有找到元素，原因如下：
+在created的时候，视图中的html并没有渲染出来，所以此时如果直接去操作html的dom节点，一定找不到相关的元素。
+而在mounted中，由于此时html已经渲染出来了，所以可以直接操作dom节点，故输出了结果“xiaohuanIT”。
+    * */
+    template:"<ul><li id='name'>{{name}}</li><li>{{age}}</li><li>{{city}}</li></ul>",
+    created:function(){
+      this.name="xiaohuanIT"
+      this.age = "12"
+      this.city ="杭州"
+      var x = document.getElementById("name")//第一个命令台错误
+      console.log(x.innerHTML);
+    },
+    mounted:function(){
+      var x = document.getElementById("name")//第二个命令台输出的结果
+      console.log(x.innerHTML);
+    }
+    });
+
+
+  Vue.component("counter-1",{    //1.组件名为"conter"; 2.data 写函数; 3.template 写组件的内容（元素和触发的事件）
+    data:function(){
+      return {count:0}
+    },
+
+  //template 是模板的意思，在 html 里面是一个可以同时控制多个子元素的父元素。在这里定义了组件的内容
+    template:'<button v-on:click="count++">点击计算点击次数：{{count}}次</button>'
+  });
+
+  Vue.component("counter-2",{
+    data() {
+      return {count:0}
+    },
+
+    //template 是模板的意思，在 html 里面是一个可以同时控制多个子元素的父元素。在这里定义了组件的内容
+    template:'<button v-on:click="count++">点击计算点击次数：{{count}}次</button>'
+  });
+
+  //定义一个新的Vue实例，用el绑定组件元素（demo3）的父元素father元素上。
+  new Vue({
+    el:"#father"
+  })
+</script>
+</html>
